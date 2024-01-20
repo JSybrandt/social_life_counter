@@ -10,5 +10,7 @@
     <p> {{ player.name }} : {{ player.life }} </p>
   }
 }
-<button (click)="onPlusOne()">+1</button>
-<button (click)="onMinusOne()">-1</button>
+@if(joined){
+  <button (click)="onPlusOne()">+1</button>
+  <button (click)="onMinusOne()">-1</button>
+}
