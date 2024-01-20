@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "socket-io-test"
+version = "0.1.0"
+description = ""
+authors = ["None"]
+readme = "README.md"
+packages = [{include = "server"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+python-socketio = "^5.10.0"
+flask = "^3.0.0"
+flask-socketio = "^5.3.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
