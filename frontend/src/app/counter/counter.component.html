@@ -1,3 +1,14 @@
-<p>counter works!</p>
-<p> {{ message }}</p>
-<button (click)="onPing()">Ping</button>
+<input type="text" name="playerName" [(ngModel)]="playerName" (ngModelChange)="onNameChange()">
+@if(joined){
+  <button (click)="onLeave()">Leave</button>
+} @else {
+  <button (click)="onJoin()">Join</button>
+}
+<hr/>
+@if(gameState){
+  @for(player of gameState.players; track player){
+    <p> {{ player.name }} : {{ player.life }} </p>
+  }
+}
+<button (click)="onPlusOne()">+1</button>
+<button (click)="onMinusOne()">-1</button>

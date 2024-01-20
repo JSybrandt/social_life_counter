@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {CounterService} from '../counter-service/counter-service.module'
+import { FormsModule } from '@angular/forms';
+import {CounterService, GameState} from '../counter-service/counter-service.module'
 
 @Component({
   selector: 'app-counter',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './counter.component.html',
   styleUrl: './counter.component.scss',
   providers: []
@@ -12,16 +13,36 @@ import {CounterService} from '../counter-service/counter-service.module'
 export class CounterComponent implements OnInit {
   constructor(private counterService:CounterService){}
 
-  message: string = "";
+  joined: boolean = false
+  gameState: GameState|undefined;
+  playerName: string = "New Player"
 
   ngOnInit() {
-    this.counterService.pong().subscribe((data)=>{
-      this.message = data.text;
+    this.counterService.update().subscribe((gameState)=>{
+      this.gameState = gameState
     })
   }
 
-  onPing(){
-    this.counterService.ping();
+  onJoin(){
+    this.counterService.join(this.playerName);
+    this.joined = true
+  }
+  onLeave(){
+    if(!this.joined) return;
+    this.counterService.leave();
+    this.joined = false;
+  }
+  onPlusOne(){
+    if(!this.joined) return;
+    this.counterService.modifyHealth(+1);
+  }
+  onMinusOne(){
+    if(!this.joined) return;
+    this.counterService.modifyHealth(-1);
+  }
+  onNameChange(){
+    if(!this.joined) return;
+    this.counterService.updateName(this.playerName);
   }
 
 }

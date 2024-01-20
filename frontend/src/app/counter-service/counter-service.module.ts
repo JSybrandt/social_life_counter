@@ -3,8 +3,13 @@ import { CommonModule } from '@angular/common';
 import { io } from "socket.io-client";
 import { Observable } from 'rxjs';
 
+export class PlayerState {
+  constructor(public name: string, public life: number){}
+}
 
-
+export class GameState {
+  constructor(public players: PlayerState[]){}
+}
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +17,25 @@ import { Observable } from 'rxjs';
 export class CounterService {
   private socket = io("http://localhost:3000");
 
-  ping(){
-    this.socket.emit("ping", {'text': 'ping'});
+  join(name:string){
+    this.socket.emit("join", {"name": name});
   }
 
-  pong() {
-    return new Observable<{text:string}>(observer => {
-      this.socket.on('pong', (data=> {observer.next(data)}));
+  leave(){
+    this.socket.emit("leave");
+  }
+
+  modifyHealth(delta: number){
+    this.socket.emit("modify_health", {"delta": delta});
+  }
+
+  updateName(name: string){
+    this.socket.emit("update_name", {"name": name});
+  }
+
+  update() {
+    return new Observable<GameState>(observer => {
+      this.socket.on('update', (gameState => {observer.next(gameState)}));
       return () => { this.socket.disconnect(); };
     });
   }
